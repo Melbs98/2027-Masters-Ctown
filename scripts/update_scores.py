@@ -3,7 +3,7 @@ import requests
 from openpyxl import load_workbook
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-WORKBOOK_PATH = REPO_ROOT / "data" / "2026 Masters Draft & Scoreboard.xlsx"
+WORKBOOK_PATH = REPO_ROOT / "data" / "2027 Masters Draft & Scoreboard.xlsx"
 
 TOURNAMENT_ID = "401811941"
 ESPN_API_URL = f"https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard?tournamentId={TOURNAMENT_ID}"
