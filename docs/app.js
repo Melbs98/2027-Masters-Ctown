@@ -53,7 +53,7 @@ function renderPayouts(data) {
   container.innerHTML = "";
 
   const firstSection = data?.sections?.[0];
-  const message = firstSection?.banner_message ?? "Wait for 2027, losers";
+  const message = firstSection?.banner_message ?? "We'll see you in 2027";
 
   container.innerHTML = `
     <div class="masters-banner-wrap">
@@ -138,7 +138,7 @@ function insertOrUpdateCountdown() {
             </div>
           </div>
 
-          <div class="tick-style-subtext">April 7, 2027 at 7:00 PM PT</div>
+          <div class="tick-style-subtext">April 7, 2027 at 7:00 PM CDT</div>
         </div>
       </div>
     `;
@@ -146,7 +146,7 @@ function insertOrUpdateCountdown() {
     pageHeader.insertAdjacentElement("afterend", countdownCard);
   }
 
-  const targetDate = new Date("2027-04-08T02:00:00Z");
+  const targetDate = new Date("2027-04-08T00:00:00Z");
   const parts = getCountdownParts(targetDate);
 
   const daysEl = document.getElementById("countdown-days");
