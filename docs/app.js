@@ -66,22 +66,31 @@ function renderPayouts(data) {
   `;
 }
 
-function getCountdownText(targetDate) {
+function getCountdownParts(targetDate) {
   const now = new Date();
   const diffMs = targetDate.getTime() - now.getTime();
 
   if (diffMs <= 0) {
-    return "Draft day is here.";
+    return {
+      days: "000",
+      hours: "00",
+      minutes: "00",
+      seconds: "00"
+    };
   }
 
-  const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const days = Math.floor(totalHours / 24);
-  const hours = totalHours % 24;
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
 
-  const dayLabel = days === 1 ? "day" : "days";
-  const hourLabel = hours === 1 ? "hour" : "hours";
-
-  return `${days} ${dayLabel}, ${hours} ${hourLabel}`;
+  return {
+    days: String(days).padStart(3, "0"),
+    hours: String(hours).padStart(2, "0"),
+    minutes: String(minutes).padStart(2, "0"),
+    seconds: String(seconds).padStart(2, "0")
+  };
 }
 
 function insertOrUpdateCountdown() {
@@ -93,24 +102,62 @@ function insertOrUpdateCountdown() {
   if (!countdownCard) {
     countdownCard = document.createElement("section");
     countdownCard.id = "countdown-section";
-    countdownCard.className = "section-card countdown-section";
+    countdownCard.className = "countdown-hero-section";
 
     countdownCard.innerHTML = `
-      <h2>Countdown to the 2027 Masters Draft</h2>
-      <div class="countdown-card">
-        <div class="countdown-time" id="countdown-time"></div>
-        <div class="countdown-subtext">April 7, 2027 at 7:00 PM PT</div>
+      <div class="tick-style-countdown">
+        <div class="tick-style-overlay"></div>
+        <div class="tick-style-inner">
+          <div class="tick-style-title">Countdown to the 2027 Masters Draft</div>
+
+          <div class="tick-style-grid">
+            <div class="tick-style-unit">
+              <div class="tick-style-value" id="countdown-days">000</div>
+              <div class="tick-style-label">Days</div>
+            </div>
+
+            <div class="tick-style-colon">:</div>
+
+            <div class="tick-style-unit">
+              <div class="tick-style-value" id="countdown-hours">00</div>
+              <div class="tick-style-label">Hours</div>
+            </div>
+
+            <div class="tick-style-colon">:</div>
+
+            <div class="tick-style-unit">
+              <div class="tick-style-value" id="countdown-minutes">00</div>
+              <div class="tick-style-label">Minutes</div>
+            </div>
+
+            <div class="tick-style-colon">:</div>
+
+            <div class="tick-style-unit">
+              <div class="tick-style-value tick-style-seconds" id="countdown-seconds">00</div>
+              <div class="tick-style-label">Seconds</div>
+            </div>
+          </div>
+
+          <div class="tick-style-subtext">April 7, 2027 at 7:00 PM PT</div>
+        </div>
       </div>
     `;
 
     pageHeader.insertAdjacentElement("afterend", countdownCard);
   }
 
-  const countdownEl = document.getElementById("countdown-time");
-  if (!countdownEl) return;
-
   const targetDate = new Date("2027-04-08T02:00:00Z");
-  countdownEl.textContent = getCountdownText(targetDate);
+  const parts = getCountdownParts(targetDate);
+
+  const daysEl = document.getElementById("countdown-days");
+  const hoursEl = document.getElementById("countdown-hours");
+  const minutesEl = document.getElementById("countdown-minutes");
+  const secondsEl = document.getElementById("countdown-seconds");
+
+  if (daysEl) daysEl.textContent = parts.days;
+  if (hoursEl) hoursEl.textContent = parts.hours;
+  if (minutesEl) minutesEl.textContent = parts.minutes;
+  if (secondsEl) secondsEl.textContent = parts.seconds;
 }
 
 function movePayoutsBelowGif() {
@@ -135,13 +182,8 @@ function hideOffseasonSections() {
   const teamsSection = teamsGrid?.closest(".section-card");
   const scoresSection = scoresTable?.closest(".section-card");
 
-  if (teamsSection) {
-    teamsSection.style.display = "none";
-  }
-
-  if (scoresSection) {
-    scoresSection.style.display = "none";
-  }
+  if (teamsSection) teamsSection.style.display = "none";
+  if (scoresSection) scoresSection.style.display = "none";
 }
 
 async function main() {
@@ -158,165 +200,7 @@ async function main() {
   setTimeout(movePayoutsBelowGif, 50);
 
   setInterval(() => updateTimestamp(meta), 30000);
-  setInterval(insertOrUpdateCountdown, 60000);
-}
-
-main().catch(error => {
-  console.error(error);
-  const updatedEl = document.getElementById("updated");
-  if (updatedEl) {
-    updatedEl.textContent = "Could not load updated data.";
-  }
-});async function loadJson(path) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Failed to load ${path}`);
-  }
-  return response.json();
-}
-
-function formatRelativeTime(date) {
-  const now = new Date();
-  const diffMs = now - date;
-  const diffMinutes = Math.floor(diffMs / 60000);
-
-  if (diffMinutes < 1) return "just now";
-  if (diffMinutes === 1) return "1 minute ago";
-  if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
-
-  const diffHours = Math.floor(diffMinutes / 60);
-  if (diffHours === 1) return "1 hour ago";
-  if (diffHours < 24) return `${diffHours} hours ago`;
-
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays === 1) return "1 day ago";
-  return `${diffDays} days ago`;
-}
-
-function formatLastUpdated(isoString) {
-  const date = new Date(isoString);
-
-  const formattedTime = date.toLocaleString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit",
-    timeZoneName: "short",
-  });
-
-  return `Last updated: ${formattedTime} (${formatRelativeTime(date)})`;
-}
-
-function updateTimestamp(meta) {
-  const updatedEl = document.getElementById("updated");
-  if (!updatedEl || !meta?.last_updated) return;
-  updatedEl.textContent = formatLastUpdated(meta.last_updated);
-}
-
-function renderPayouts(data) {
-  const container = document.getElementById("payouts-list");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const firstSection = data?.sections?.[0];
-  const message = firstSection?.banner_message ?? "Wait for 2027, losers";
-  const title = firstSection?.title ?? "Payouts";
-
-  container.innerHTML = `
-    <div class="masters-banner-wrap">
-      <div class="masters-banner">
-        <div class="masters-banner-inner">
-          <div class="masters-banner-title">${title}</div>
-          <div class="masters-banner-message">${message}</div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function getCountdownText(targetDate) {
-  const now = new Date();
-  const diffMs = targetDate.getTime() - now.getTime();
-
-  if (diffMs <= 0) {
-    return "Draft day is here.";
-  }
-
-  const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const days = Math.floor(totalHours / 24);
-  const hours = totalHours % 24;
-
-  const dayLabel = days === 1 ? "day" : "days";
-  const hourLabel = hours === 1 ? "hour" : "hours";
-
-  return `${days} ${dayLabel}, ${hours} ${hourLabel}`;
-}
-
-function insertOrUpdateCountdown() {
-  const payoutsList = document.getElementById("payouts-list");
-  if (!payoutsList) return;
-
-  const payoutsSection = payoutsList.closest(".section-card");
-  if (!payoutsSection) return;
-
-  let countdownCard = document.getElementById("countdown-section");
-
-  if (!countdownCard) {
-    countdownCard = document.createElement("section");
-    countdownCard.id = "countdown-section";
-    countdownCard.className = "section-card countdown-section";
-
-    countdownCard.innerHTML = `
-      <h2>Countdown to the 2027 Masters Draft</h2>
-      <div class="countdown-card">
-        <div class="countdown-time" id="countdown-time"></div>
-        <div class="countdown-subtext">April 7, 2027 at 7:00 PM CDT</div>
-      </div>
-    `;
-
-    payoutsSection.insertAdjacentElement("afterend", countdownCard);
-  }
-
-  const countdownEl = document.getElementById("countdown-time");
-  if (!countdownEl) return;
-
-  // April 7, 2027 at 7:00 PM CDT = April 8, 2027 02:00:00 UTC
-  const targetDate = new Date("2027-04-08T00:00:00Z");
-  countdownEl.textContent = getCountdownText(targetDate);
-}
-
-function hideOffseasonSections() {
-  const teamsGrid = document.getElementById("teams-grid");
-  const scoresTable = document.getElementById("scores-table");
-
-  const teamsSection = teamsGrid?.closest(".section-card");
-  const scoresSection = scoresTable?.closest(".section-card");
-
-  if (teamsSection) {
-    teamsSection.style.display = "none";
-  }
-
-  if (scoresSection) {
-    scoresSection.style.display = "none";
-  }
-}
-
-async function main() {
-  const [payouts, meta] = await Promise.all([
-    loadJson("./data/payouts_static.json"),
-    loadJson("./data/meta.json")
-  ]);
-
-  renderPayouts(payouts);
-  updateTimestamp(meta);
-  insertOrUpdateCountdown();
-  hideOffseasonSections();
-
-  setInterval(() => updateTimestamp(meta), 30000);
-  setInterval(insertOrUpdateCountdown, 60000);
+  setInterval(insertOrUpdateCountdown, 1000);
 }
 
 main().catch(error => {
