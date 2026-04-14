@@ -6,25 +6,6 @@ async function loadJson(path) {
   return response.json();
 }
 
-function scoreClass(score) {
-  if (score === null || score === undefined || score === "") return "";
-  const text = String(score).trim().toUpperCase();
-
-  if (text === "E" || text === "0") return "score-even";
-  if (text === "CUT" || text === "WD" || text === "DQ") return "score-cut";
-  if (text.startsWith("-")) return "score-under";
-  if (text.startsWith("+")) return "score-over";
-
-  const num = Number(text);
-  if (!Number.isNaN(num)) {
-    if (num < 0) return "score-under";
-    if (num > 0) return "score-over";
-    return "score-even";
-  }
-
-  return "";
-}
-
 function formatRelativeTime(date) {
   const now = new Date();
   const diffMs = now - date;
@@ -56,157 +37,123 @@ function formatLastUpdated(isoString) {
     timeZoneName: "short",
   });
 
-  const relativeTime = formatRelativeTime(date);
-  return `Last updated: ${formattedTime} (${relativeTime})`;
+  return `Last updated: ${formattedTime} (${formatRelativeTime(date)})`;
 }
 
-function displayBestTotal(value) {
-  if (value === null || value === undefined || value === "") return "-";
-  if (value > 0) return `+${value}`;
-  return String(value);
-}
-
-function formatMoney(amount) {
-  return `$${Number(amount).toFixed(2).replace(".00", "")}`;
+function updateTimestamp(meta) {
+  const updatedEl = document.getElementById("updated");
+  if (!updatedEl || !meta?.last_updated) return;
+  updatedEl.textContent = formatLastUpdated(meta.last_updated);
 }
 
 function renderPayouts(data) {
   const container = document.getElementById("payouts-list");
+  if (!container) return;
+
   container.innerHTML = "";
 
-  if (!data.sections || data.sections.length === 0) {
-    container.innerHTML = "<p>No payouts available yet.</p>";
-    return;
+  const firstSection = data?.sections?.[0];
+  const message = firstSection?.banner_message ?? "Wait for 2027, losers";
+  const title = firstSection?.title ?? "Payouts";
+
+  container.innerHTML = `
+    <div class="masters-banner-wrap">
+      <div class="masters-banner">
+        <div class="masters-banner-inner">
+          <div class="masters-banner-title">${title}</div>
+          <div class="masters-banner-message">${message}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function getCountdownText(targetDate) {
+  const now = new Date();
+  const diffMs = targetDate.getTime() - now.getTime();
+
+  if (diffMs <= 0) {
+    return "Draft day is here.";
   }
 
-  data.sections.forEach(section => {
-    const sectionEl = document.createElement("div");
-    sectionEl.className = "payout-section";
+  const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const days = Math.floor(totalHours / 24);
+  const hours = totalHours % 24;
 
-    let itemsHtml = "";
+  const dayLabel = days === 1 ? "day" : "days";
+  const hourLabel = hours === 1 ? "hour" : "hours";
 
-    if (!section.items || section.items.length === 0) {
-      itemsHtml = `<p class="payout-empty">No payouts entered yet.</p>`;
-    } else {
-      itemsHtml = section.items.map(item => {
-        const winnersHtml = item.winners.map(winner => `
-          <div class="payout-winner">
-            <span>${winner.name}</span>
-            <strong>${formatMoney(winner.amount)}</strong>
-          </div>
-        `).join("");
-
-        return `
-          <div class="payout-item">
-            <h3>${item.label}</h3>
-            <div>${winnersHtml}</div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    sectionEl.innerHTML = `
-      <h3 class="payout-section-title">${section.title}</h3>
-      ${itemsHtml}
-    `;
-
-    container.appendChild(sectionEl);
-  });
+  return `${days} ${dayLabel}, ${hours} ${hourLabel}`;
 }
 
-function renderTeams(teams) {
-  const grid = document.getElementById("teams-grid");
-  grid.innerHTML = "";
+function insertOrUpdateCountdown() {
+  const payoutsList = document.getElementById("payouts-list");
+  if (!payoutsList) return;
 
-  teams.forEach((team, index) => {
-    const card = document.createElement("div");
-    card.className = "team-card";
+  const payoutsSection = payoutsList.closest(".section-card");
+  if (!payoutsSection) return;
 
-    const totalValue = team.best3_total ?? team.best4_total ?? null;
-    const totalLabel = team.best3_total !== undefined ? "Best 3 Total" : "Best 4 Total";
+  let countdownCard = document.getElementById("countdown-section");
 
-    const golfersRows = team.golfers.map(golfer => {
-      const score = golfer.score ?? "";
-      const scoreText = score === "" ? "-" : score;
-      const scoreCss = scoreClass(score);
+  if (!countdownCard) {
+    countdownCard = document.createElement("section");
+    countdownCard.id = "countdown-section";
+    countdownCard.className = "section-card countdown-section";
 
-      return `
-        <tr>
-          <td class="player-name">${golfer.player ?? ""}</td>
-          <td class="score-cell ${scoreCss}">${scoreText}</td>
-        </tr>
-      `;
-    }).join("");
-
-    card.innerHTML = `
-      <div class="team-card-header">
-        <div class="team-rank">#${index + 1}</div>
-        <div class="team-name">${team.team ?? ""}</div>
+    countdownCard.innerHTML = `
+      <h2>Countdown to the 2027 Masters Draft</h2>
+      <div class="countdown-card">
+        <div class="countdown-time" id="countdown-time"></div>
+        <div class="countdown-subtext">April 7, 2027 at 7:00 PM PT</div>
       </div>
-
-      <table class="team-table">
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${golfersRows}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>${totalLabel}</td>
-            <td class="${scoreClass(totalValue)}">${displayBestTotal(totalValue)}</td>
-          </tr>
-        </tfoot>
-      </table>
     `;
 
-    grid.appendChild(card);
-  });
+    payoutsSection.insertAdjacentElement("afterend", countdownCard);
+  }
+
+  const countdownEl = document.getElementById("countdown-time");
+  if (!countdownEl) return;
+
+  // April 7, 2027 at 7:00 PM PT = April 8, 2027 02:00:00 UTC
+  const targetDate = new Date("2027-04-08T02:00:00Z");
+  countdownEl.textContent = getCountdownText(targetDate);
 }
 
-function renderScores(scores) {
-  const tbody = document.querySelector("#scores-table tbody");
-  tbody.innerHTML = "";
+function hideOffseasonSections() {
+  const teamsGrid = document.getElementById("teams-grid");
+  const scoresTable = document.getElementById("scores-table");
 
-  scores.forEach(score => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${score.pos ?? ""}</td>
-      <td>${score.player ?? ""}</td>
-      <td class="${scoreClass(score.score)}">${score.score ?? ""}</td>
-      <td class="${scoreClass(score.today)}">${score.today ?? ""}</td>
-      <td>${score.thru ?? ""}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+  const teamsSection = teamsGrid?.closest(".section-card");
+  const scoresSection = scoresTable?.closest(".section-card");
 
-function updateTimestamp(meta) {
-  document.getElementById("updated").textContent =
-    formatLastUpdated(meta.last_updated);
+  if (teamsSection) {
+    teamsSection.style.display = "none";
+  }
+
+  if (scoresSection) {
+    scoresSection.style.display = "none";
+  }
 }
 
 async function main() {
-  const [teams, scores, payouts, meta] = await Promise.all([
-    loadJson("./data/teams.json"),
-    loadJson("./data/scores.json"),
+  const [payouts, meta] = await Promise.all([
     loadJson("./data/payouts_static.json"),
     loadJson("./data/meta.json")
   ]);
 
   renderPayouts(payouts);
-  renderTeams(teams);
-  renderScores(scores);
   updateTimestamp(meta);
+  insertOrUpdateCountdown();
+  hideOffseasonSections();
 
   setInterval(() => updateTimestamp(meta), 30000);
+  setInterval(insertOrUpdateCountdown, 60000);
 }
 
 main().catch(error => {
   console.error(error);
-  document.getElementById("updated").textContent =
-    "Could not load updated data.";
+  const updatedEl = document.getElementById("updated");
+  if (updatedEl) {
+    updatedEl.textContent = "Could not load updated data.";
+  }
 });
