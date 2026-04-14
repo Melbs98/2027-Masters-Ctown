@@ -1,52 +1,85 @@
+:root {
+  --augusta-green: #1f5c3a;
+  --augusta-green-dark: #173f29;
+  --augusta-green-deep: #12321f;
+  --masters-gold: #f2c94c;
+  --cream: #f8f3e8;
+  --parchment: #f3ecdf;
+  --sand: #ece2cf;
+  --border: #cdbfa3;
+  --text: #1f1f1f;
+  --muted: #5c6558;
+  --under: #14733a;
+  --over: #bc2f2f;
+  --cut: #6d6d6d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
-  font-family: Arial, sans-serif;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
   margin: 0;
-  background: linear-gradient(to bottom, #f3f0e8 0%, #ece6d8 100%);
-  color: #1b1b1b;
+  font-family: Arial, sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(rgba(20, 34, 18, 0.25), rgba(20, 34, 18, 0.35)),
+    url("https://melbs98.github.io/2027-Masters-Ctown/Augusta-background.jpg") center center / cover no-repeat fixed;
+  min-height: 100vh;
 }
 
 .wrap {
-  max-width: 1320px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 24px;
 }
 
 .page-header {
-  margin-bottom: 24px;
+  background: rgba(255, 248, 234, 0.95);
+  border-radius: 30px;
+  padding: 25px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 .page-header h1 {
-  margin: 0 0 8px 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.7rem;
-  font-weight: 700;
-  color: #1f4d2e;
-  letter-spacing: 0.3px;
+  font-family: Georgia, serif;
+  color: var(--augusta-green);
+  font-size: 3rem;
+  line-height: 1.05;
+  margin: 0 0 10px 0;
+  word-break: break-word;
 }
 
 #updated {
-  color: #4e5a4f;
-  font-size: 1rem;
+  margin: 0;
+  color: var(--muted);
 }
 
 .section-card {
-  background: rgba(255, 252, 245, 0.96);
-  border: 1px solid #d8cfbc;
-  border-radius: 16px;
+  background:
+    linear-gradient(rgba(255, 252, 245, 0.85), rgba(246, 239, 226, 0.9)),
+    url("https://melbs98.github.io/2027-Masters-AZ/Augusta-background.jpg") center center / cover no-repeat;
+  border-radius: 28px;
   padding: 20px;
-  margin-bottom: 24px;
-  box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  margin-top: 25px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 .section-card h2 {
+  font-family: Georgia, serif;
+  color: var(--augusta-green);
+  font-size: 2.2rem;
   margin-top: 0;
   margin-bottom: 18px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2rem;
-  color: #1f4d2e;
-  letter-spacing: 0.2px;
+  word-break: break-word;
 }
 
 .teams-grid {
@@ -57,243 +90,99 @@ body {
 }
 
 .team-card {
-  border: 1px solid #b9ad93;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f7f2e8;
   min-width: 0;
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.45);
-  position: relative;
-}
-
-.team-card::before {
-  content: "";
-  display: block;
-  height: 4px;
-  background: #f0c44f;
+  background:
+    linear-gradient(rgba(248, 243, 232, 0.78), rgba(243, 236, 223, 0.82)),
+    url("https://melbs98.github.io/2027-Masters-AZ/Augusta-background.jpg") center center / cover no-repeat;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .team-card-header {
-  background: linear-gradient(to bottom, #245c3a 0%, #1c4b2f 100%);
-  color: #fffdf7;
-  padding: 10px 12px 12px 12px;
-  border-bottom: 1px solid #143621;
+  background: linear-gradient(#285f3d, #1c4b2f);
+  color: white;
+  padding: 10px 12px;
 }
 
 .team-rank {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  opacity: 0.95;
   margin-bottom: 4px;
-  letter-spacing: 0.4px;
 }
 
 .team-name {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, serif;
   font-size: 18px;
-  font-weight: 700;
   line-height: 1.15;
-  white-space: normal;
   word-break: break-word;
-  color: #fffdf7;
 }
 
 .team-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  background: #f7f2e8;
 }
 
 .team-table th,
 .team-table td {
-  padding: 8px 10px;
-  border: 1px solid #cdbfa3;
-  text-align: left;
+  border: 1px solid var(--border);
+  padding: 8px;
   font-size: 13px;
 }
 
-.team-table thead th {
-  background: #ece2cf;
-  color: #2f2a22;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+.team-table thead {
+  background: var(--sand);
+}
+
+.team-table th:first-child,
+.team-table td:first-child {
+  width: auto;
 }
 
 .team-table th:last-child,
 .team-table td:last-child {
+  width: 72px;
   text-align: right;
-  width: 62px;
   white-space: nowrap;
-  font-weight: 800;
 }
 
-.team-table tbody tr:nth-child(even) td {
-  background: #f3ecdf;
-}
-
-.team-table tfoot td {
-  background: #e1ead8;
-  font-weight: 800;
-  border-top: 2px solid #aab89c;
+.team-table tbody tr:nth-child(even) {
+  background: rgba(243, 236, 223, 0.6);
 }
 
 .player-name {
   overflow-wrap: anywhere;
   word-break: break-word;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2px;
-  color: #1f1f1f;
 }
 
-.score-cell {
-  font-weight: 800;
-}
-
-.score-under {
-  color: #15733a;
-  font-weight: 800;
-}
-
-.score-over {
-  color: #b3322b;
-  font-weight: 800;
-}
-
-.score-even {
-  color: #1f1f1f;
-  font-weight: 800;
-}
-
-.score-cut {
-  color: #6b6b6b;
-  font-weight: 800;
-}
+.score-under { color: var(--under); font-weight: bold; }
+.score-over { color: var(--over); font-weight: bold; }
+.score-even { color: black; font-weight: bold; }
+.score-cut { color: var(--cut); font-weight: bold; }
 
 #scores-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-  background: #faf7f0;
-  border: 1px solid #d5cab6;
-  overflow: hidden;
+  table-layout: fixed;
 }
 
 #scores-table th,
 #scores-table td {
-  padding: 10px 8px;
-  border-bottom: 1px solid #ddd1bc;
-  text-align: left;
+  border: 1px solid var(--border);
+  padding: 8px;
+  font-size: 13px;
 }
 
-#scores-table th {
-  background: #ece2cf;
-  color: #2f2a22;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
-#scores-table tbody tr:nth-child(even) td {
-  background: #f7f2e8;
-}
+/* Offseason banner */
 
-#payouts-list {
-  display: grid;
-  gap: 16px;
-}
-
-.payout-section {
-  border: 1px solid #d3c6b0;
-  border-radius: 12px;
-  padding: 14px 16px;
-  background: #f8f4ec;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
-}
-
-.payout-section-title {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 22px;
-  color: #1f4d2e;
-}
-
-.payout-item {
-  border-top: 1px solid #e1d8c8;
-  padding-top: 10px;
-  margin-top: 10px;
-}
-
-.payout-item:first-of-type {
-  border-top: none;
-  padding-top: 0;
-  margin-top: 0;
-}
-
-.payout-item h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 16px;
-  color: #3a3329;
-}
-
-.payout-winner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 4px 0;
-}
-
-.payout-winner strong {
-  white-space: nowrap;
-  color: #1f4d2e;
-}
-
-.payout-empty {
-  margin: 0;
-  color: #6f6a5f;
-}
-
-@media (max-width: 1200px) {
-  .teams-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 1000px) {
-  .teams-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .wrap {
-    padding: 14px;
-  }
-
-  .page-header h1 {
-    font-size: 2.1rem;
-  }
-
-  .section-card h2 {
-    font-size: 1.6rem;
-  }
-
-  .teams-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 500px) {
-  .teams-grid {
-    grid-template-columns: 1fr;
-  }
 .masters-banner-wrap {
   display: flex;
   justify-content: center;
@@ -351,38 +240,105 @@ body {
   text-shadow: 0 2px 10px rgba(0,0,0,0.18);
 }
 
-.countdown-section h2 {
-  text-align: center;
+/* TickCounter-style countdown */
+
+.countdown-hero-section {
+  margin: 24px 0 28px;
 }
 
-.countdown-card {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 28px 20px;
-  text-align: center;
-  border-radius: 24px;
+.tick-style-countdown {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  min-height: 280px;
   background:
-    linear-gradient(rgba(255, 252, 245, 0.88), rgba(246, 239, 226, 0.92)),
-    url("https://melbs98.github.io/2027-Masters-Ctown/Augusta-background.jpg") center center / cover no-repeat;
-  box-shadow:
-    0 12px 30px rgba(18, 39, 22, 0.18),
-    inset 0 1px 0 rgba(255,255,255,0.75);
-  border: 1px solid rgba(216, 204, 182, 0.96);
+    linear-gradient(rgba(8, 12, 10, 0.62), rgba(8, 12, 10, 0.62)),
+    url("https://melbs98.github.io/2027-Masters-AZ/Augusta-background.jpg") center center / cover no-repeat;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.28);
 }
 
-.countdown-time {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  line-height: 1.1;
-  font-weight: 700;
-  color: #1f5c3a;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+.tick-style-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.35)),
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.04), transparent 45%);
+  pointer-events: none;
 }
 
-.countdown-subtext {
-  margin-top: 10px;
+.tick-style-inner {
+  position: relative;
+  z-index: 1;
+  padding: 18px 26px 26px;
+  text-align: center;
+}
+
+.tick-style-title {
+  font-family: Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1.05;
+  color: #158015;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  margin-bottom: 18px;
+}
+
+.tick-style-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: end;
+  gap: 6px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.tick-style-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tick-style-value {
+  font-family: Arial, sans-serif;
+  font-weight: 300;
+  font-size: clamp(4rem, 11vw, 10.5rem);
+  line-height: 0.9;
+  letter-spacing: 1px;
+  color: #ffd200;
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.28),
+    0 6px 16px rgba(0, 0, 0, 0.28);
+}
+
+.tick-style-seconds {
+  color: #169216;
+}
+
+.tick-style-colon {
+  font-family: Arial, sans-serif;
+  font-weight: 300;
+  font-size: clamp(3.2rem, 8vw, 8rem);
+  line-height: 0.95;
+  color: #ffd200;
+  padding: 0 2px 12px;
+}
+
+.tick-style-label {
+  margin-top: 12px;
+  font-family: Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: #ffd200;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.tick-style-subtext {
+  margin-top: 16px;
   font-size: 1rem;
-  color: #5c6558;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes mastersFloat {
@@ -391,7 +347,92 @@ body {
   100% { transform: translateY(0px); }
 }
 
+@media (max-width: 1200px) {
+  .teams-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .teams-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-header h1 {
+    font-size: 2.4rem;
+  }
+
+  .tick-style-inner {
+    padding: 18px 14px 22px;
+  }
+
+  .tick-style-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .tick-style-colon {
+    display: none;
+  }
+
+  .tick-style-value {
+    font-size: clamp(3.4rem, 16vw, 6rem);
+  }
+
+  .tick-style-label {
+    margin-top: 6px;
+  }
+}
+
 @media (max-width: 640px) {
+  .wrap {
+    padding: 12px;
+  }
+
+  .page-header {
+    border-radius: 20px;
+    padding: 18px;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .section-card {
+    border-radius: 20px;
+    padding: 14px;
+    margin-top: 16px;
+  }
+
+  .section-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 14px;
+  }
+
+  .teams-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .team-card {
+    width: 100%;
+  }
+
+  .team-name {
+    font-size: 17px;
+  }
+
+  .team-table th,
+  .team-table td {
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  .team-table th:last-child,
+  .team-table td:last-child {
+    width: 64px;
+  }
+
   .masters-banner {
     border-radius: 18px;
   }
@@ -404,13 +445,7 @@ body {
     font-size: clamp(1.8rem, 8vw, 2.9rem);
   }
 
-  .countdown-card {
-    padding: 22px 14px;
-    border-radius: 18px;
+  .tick-style-title {
+    font-size: clamp(1.5rem, 8vw, 2.3rem);
   }
-
-  .countdown-time {
-    font-size: clamp(1.6rem, 8vw, 2.3rem);
-  }
-}
 }
