@@ -109,7 +109,8 @@ def fetch_scores():
                     rows.append(row)
 
     if not rows:
-        raise RuntimeError("No golfers returned from ESPN API.")
+        print("No golfers returned from ESPN API. Skipping score update.")
+        return []
 
     def sort_key(row):
         pos = row["pos"]
@@ -148,6 +149,10 @@ def update_excel(scores):
 
 def main():
     scores = fetch_scores()
+    if not scores:
+        print("No score data available. Leaving workbook unchanged.")
+        return
+
     update_excel(scores)
     print(f"Updated workbook with {len(scores)} golfers.")
 
