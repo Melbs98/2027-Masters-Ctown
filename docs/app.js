@@ -75,7 +75,7 @@ function getCountdownParts(targetDate) {
       days: "000",
       hours: "00",
       minutes: "00",
-      seconds: "00"
+      seconds: "00",
     };
   }
 
@@ -89,7 +89,7 @@ function getCountdownParts(targetDate) {
     days: String(days).padStart(3, "0"),
     hours: String(hours).padStart(2, "0"),
     minutes: String(minutes).padStart(2, "0"),
-    seconds: String(seconds).padStart(2, "0")
+    seconds: String(seconds).padStart(2, "0"),
   };
 }
 
@@ -182,14 +182,19 @@ function hideOffseasonSections() {
   const teamsSection = teamsGrid?.closest(".section-card");
   const scoresSection = scoresTable?.closest(".section-card");
 
-  if (teamsSection) teamsSection.style.display = "none";
-  if (scoresSection) scoresSection.style.display = "none";
+  if (teamsSection) {
+    teamsSection.style.display = "none";
+  }
+
+  if (scoresSection) {
+    scoresSection.style.display = "none";
+  }
 }
 
 async function main() {
   const [payouts, meta] = await Promise.all([
     loadJson("./data/payouts_static.json"),
-    loadJson("./data/meta.json")
+    loadJson("./data/meta.json"),
   ]);
 
   renderPayouts(payouts);
@@ -197,13 +202,13 @@ async function main() {
   insertOrUpdateCountdown();
   hideOffseasonSections();
 
-  setTimeout(movePayoutsBelowGif, 50);
+  setTimeout(movePayoutsBelowGif, 100);
 
   setInterval(() => updateTimestamp(meta), 30000);
   setInterval(insertOrUpdateCountdown, 1000);
 }
 
-main().catch(error => {
+main().catch((error) => {
   console.error(error);
   const updatedEl = document.getElementById("updated");
   if (updatedEl) {
