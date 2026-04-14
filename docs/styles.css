@@ -294,4 +294,138 @@ body {
   .teams-grid {
     grid-template-columns: 1fr;
   }
+  .masters-banner-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0 6px;
+}
+
+.masters-banner {
+  width: 100%;
+  max-width: 980px;
+  border-radius: 26px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(31, 92, 58, 0.96), rgba(20, 58, 35, 0.96));
+  box-shadow:
+    0 16px 36px rgba(18, 39, 22, 0.24),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+  position: relative;
+  animation: mastersFloat 4s ease-in-out infinite;
+}
+
+.masters-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 8px;
+  background: linear-gradient(to right, #f2c94c, #e8d07f, #d75c8a, #f2c94c);
+}
+
+.masters-banner::after {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 65%);
+  pointer-events: none;
+}
+
+.masters-banner-inner {
+  padding: 34px 24px 30px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.masters-banner-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f2c94c;
+  margin-bottom: 14px;
+}
+
+.masters-banner-message {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  line-height: 1.08;
+  font-weight: 700;
+  color: #fffdf7;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.18);
+}
+
+.countdown-section h2 {
+  text-align: center;
+}
+
+.countdown-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 20px;
+  text-align: center;
+  border-radius: 24px;
+  background:
+    linear-gradient(rgba(255, 252, 245, 0.88), rgba(246, 239, 226, 0.92)),
+    url("https://melbs98.github.io/2027-Masters-AZ/Augusta-background.jpg") center center / cover no-repeat;
+  box-shadow:
+    0 12px 30px rgba(18, 39, 22, 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.75);
+  border: 1px solid rgba(216, 204, 182, 0.96);
+}
+
+.countdown-time {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f5c3a;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+}
+
+.countdown-subtext {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #5c6558;
+}
+
+@keyframes mastersFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+@media (max-width: 640px) {
+  .masters-banner {
+    border-radius: 18px;
+  }
+
+  .masters-banner-inner {
+    padding: 24px 16px 22px;
+  }
+
+  .masters-banner-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .masters-banner-message {
+    font-size: clamp(1.5rem, 8vw, 2.4rem);
+  }
+
+  .countdown-card {
+    padding: 22px 14px;
+    border-radius: 18px;
+  }
+
+  .countdown-time {
+    font-size: clamp(1.6rem, 8vw, 2.3rem);
+  }
+}
 }
