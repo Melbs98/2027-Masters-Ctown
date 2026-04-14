@@ -28,8 +28,6 @@ def normalize_player_name(name):
     text = re.sub(r"\s+", " ", text)
     return ALIASES.get(text, text)
 
-STATIC_CUT_PLAYERS_NORMALIZED = {normalize_player_name(name) for name in STATIC_CUT_PLAYERS}
-
 def normalize_score_display(pos, score, thru, today):
     pos_text = "" if pos is None else str(pos).strip().upper()
     score_text = "" if score is None else str(score).strip().upper()
@@ -165,10 +163,6 @@ def main():
 
         lookup_name = normalize_player_name(player)
 
-        if lookup_name in STATIC_CUT_PLAYERS_NORMALIZED:
-            display_score = "CUT"
-            numeric_score = None
-        else:
             display_score = normalize_score_display(pos, score, thru, today)
             numeric_score = score_to_number(display_score)
 
