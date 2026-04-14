@@ -1,6 +1,8 @@
 name: Update Scores
 
 on:
+  schedule:
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -9,15 +11,19 @@ permissions:
   id-token: write
 
 jobs:
-  update:
+  update-and-deploy:
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -30,29 +36,22 @@ jobs:
       - name: Export site data
         run: python scripts/export_site_data.py
 
-      - name: Commit changes
+      - name: Commit updated files
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add docs/data/*.json
+          git add docs data scripts
           git commit -m "Auto update scores" || echo "No changes"
           git push
 
-  deploy:
-    needs: update
-    runs-on: ubuntu-latest
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+        id: deployment
+        uses: actions/deploy-pages@v4
