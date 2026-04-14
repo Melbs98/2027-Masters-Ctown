@@ -65,7 +65,7 @@ body {
 .section-card {
   background:
     linear-gradient(rgba(255, 252, 245, 0.85), rgba(246, 239, 226, 0.9)),
-    url("https://melbs98.github.io/2027-Masters-AZ/Augusta-background.jpg") center center / cover no-repeat;
+    url("https://melbs98.github.io/2027-Masters-Ctown/Augusta-background.jpg") center center / cover no-repeat;
   border-radius: 28px;
   padding: 20px;
   margin-top: 25px;
@@ -93,7 +93,7 @@ body {
   min-width: 0;
   background:
     linear-gradient(rgba(248, 243, 232, 0.78), rgba(243, 236, 223, 0.82)),
-    url("https://melbs98.github.io/2027-Masters-AZ/Augusta-background.jpg") center center / cover no-repeat;
+    url("https://melbs98.github.io/2027-Masters-Ctown/Augusta-background.jpg") center center / cover no-repeat;
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
@@ -253,7 +253,7 @@ img {
   min-height: 280px;
   background:
     linear-gradient(rgba(8, 12, 10, 0.62), rgba(8, 12, 10, 0.62)),
-    url("https://melbs98.github.io/2027-Masters-AZ/Augusta-background.jpg") center center / cover no-repeat;
+    url("https://melbs98.github.io/2027-Masters-Ctown/Augusta-background.jpg") center center / cover no-repeat;
   box-shadow: 0 18px 35px rgba(0, 0, 0, 0.28);
 }
 
