@@ -1,0 +1,34 @@
+name: Update Scores
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run score update
+        run: python scripts/update_scores.py
+
+      - name: Export site data
+        run: python scripts/export_site_data.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/data/*.json
+          git commit -m "Auto update scores" || echo "No changes"
+          git pus
