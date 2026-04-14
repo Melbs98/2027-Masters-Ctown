@@ -151,45 +151,35 @@ def main():
         player_name = normalize_player_name(player)
         player_to_teams[player_name].add(team_name)
 
-    for row in scores_ws.iter_rows(min_row=2, max_row=scores_ws.max_row, values_only=True):
-        pos = row[col["POS"]]
-        player = row[col["PLAYER"]]
-        score = row[col["SCORE"]]
-        today = row[col["TODAY"]]
-        thru = row[col["THRU"]]
+for row in scores_ws.iter_rows(min_row=2, max_row=scores_ws.max_row, values_only=True):
+    pos = row[col["POS"]]
+    player = row[col["PLAYER"]]
+    score = row[col["SCORE"]]
+    today = row[col["TODAY"]]
+    thru = row[col["THRU"]]
 
-        if not is_real_score_row(pos, player, score, thru):
-            continue
+    if not is_real_score_row(pos, player, score, thru):
+        continue
 
-        lookup_name = normalize_player_name(player)
+    lookup_name = normalize_player_name(player)
+    display_score = normalize_score_display(pos, score, thru, today)
+    numeric_score = score_to_number(display_score)
 
-            display_score = normalize_score_display(pos, score, thru, today)
-            numeric_score = score_to_number(display_score)
+    entry = {
+        "pos": "" if pos is None else str(pos).strip(),
+        "player": str(player).strip(),
+        "score": display_score,
+        "today": "" if today is None else str(today).strip(),
+        "thru": "" if thru is None else str(thru).strip(),
+        "r1": "" if row[col["R1"]] is None else str(row[col["R1"]]).strip(),
+        "r2": "" if row[col["R2"]] is None else str(row[col["R2"]]).strip(),
+        "r3": "" if row[col["R3"]] is None else str(row[col["R3"]]).strip(),
+        "r4": "" if row[col["R4"]] is None else str(row[col["R4"]]).strip(),
+        "numeric_score": numeric_score,
+    }
 
-        r1 = round_score_to_number(row[col["R1"]])
-        r2 = round_score_to_number(row[col["R2"]])
-        r3 = round_score_to_number(row[col["R3"]])
-
-        day3_total = None
-        if r1 is not None and r2 is not None and r3 is not None:
-            day3_total = r1 + r2 + r3
-
-        entry = {
-            "pos": "" if pos is None else str(pos).strip(),
-            "player": str(player).strip(),
-            "score": display_score,
-            "today": "" if today is None else str(today).strip(),
-            "thru": "" if thru is None else str(thru).strip(),
-            "r1": "" if row[col["R1"]] is None else str(row[col["R1"]]).strip(),
-            "r2": "" if row[col["R2"]] is None else str(row[col["R2"]]).strip(),
-            "r3": "" if row[col["R3"]] is None else str(row[col["R3"]]).strip(),
-            "r4": "" if row[col["R4"]] is None else str(row[col["R4"]]).strip(),
-            "numeric_score": numeric_score,
-            "day3_total": day3_total,
-        }
-
-        scores_lookup[lookup_name] = entry
-        score_rows.append(entry)
+    scores_lookup[lookup_name] = entry
+    score_rows.append(entry)
 
     teams_map = OrderedDict()
     for team_name in sorted({t for teams in player_to_teams.values() for t in teams}):
